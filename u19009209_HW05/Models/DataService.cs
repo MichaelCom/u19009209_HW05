@@ -27,7 +27,7 @@ namespace u19009209_HW05.Models
             SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder();
             sqlConnectionStringBuilder["Data Source"] = "DESKTOP-3ML24ME\\SQLEXPRESS";
             sqlConnectionStringBuilder["Initial Catalog"] = "Library";
-            sqlConnectionStringBuilder["IntergratedSecurity"] = ".";
+            sqlConnectionStringBuilder["Integrated Security"] = "True";
             return new SqlConnection(sqlConnectionStringBuilder.ConnectionString);
         }
 
@@ -65,7 +65,7 @@ namespace u19009209_HW05.Models
         public List<BookHybrid> getAllBooks()
         {
             List<BookHybrid> bookList = new List<BookHybrid>();
-            String command = "SELECT book.[bookId] as bookId ,book.[name] as name ,book.[pagecount] as pagecount ,book.[point] as point, auth.[surname] as authorSurname ,type.[name] typeName,  book.[authorId],book.[typeId] " +
+            String command ="SELECT book.[bookId] as bookId ,book.[name] as name ,book.[pagecount] as pagecount ,book.[point] as point, auth.[surname] as authorSurname ,type.[name] typeName,  book.[authorId],book.[typeId] " +
                             "FROM [Library].[dbo].[books] book " +
                             "JOIN [Library].[dbo].[authors] auth on book.authorId = auth.authorId " +
                             "JOIN [Library].[dbo].[types] type on book.typeId = type.typeId";
@@ -204,7 +204,7 @@ namespace u19009209_HW05.Models
                     }
                 }
             }
-            return new SelectList(authorsList, "typeId", "name");
+            return new SelectList(authorsList, "authorId", "name");
         }
     }
 }

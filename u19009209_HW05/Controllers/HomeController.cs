@@ -12,6 +12,10 @@ namespace u19009209_HW05.Controllers
 {
     public class HomeController : Controller
     {
+
+        SqlConnection SqlConnection = new SqlConnection("Data Source = DESKTOP - 3ML24ME\\SQLEXPRESS; Initial Catalog = Library; Integrated Security = True");
+
+
         public DataService db = new DataService();
         public static List<BookHybrid> Books = new List<BookHybrid>();
         public static List<Student> Students = new List<Student>();
