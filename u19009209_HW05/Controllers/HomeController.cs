@@ -13,7 +13,7 @@ namespace u19009209_HW05.Controllers
     public class HomeController : Controller
     {
 
-        SqlConnection SqlConnection = new SqlConnection("Data Source = DESKTOP - 3ML24ME\\SQLEXPRESS; Initial Catalog = Library; Integrated Security = True");
+        //SqlConnection SqlConnection = new SqlConnection("Data Source = DESKTOP - 3ML24ME\\SQLEXPRESS; Initial Catalog = Library; Integrated Security = True");
 
 
         public DataService db = new DataService();
@@ -169,7 +169,6 @@ namespace u19009209_HW05.Controllers
             }
             return View(bookInList);
         }
-
 
         [HttpGet]
         public ActionResult ViewStudents(int bookId)
