@@ -1,0 +1,79 @@
+﻿@model u19009209_HW05.Models.ViewModels.BookHybrid
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h1>
+    @Model.name -
+    @if (Model.status)
+    {
+        <span class="text-success">Book Available </span>
+    }
+    else
+    {
+        <span class="text-danger">Book Out </span>
+    }
+
+</h1>
+<hr />
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            # Borrows - @Model.totalBorrows
+        </div>
+        <div class="col-lg-6">
+            <button class="btn btn-primary" style="float:right" onclick="window.location.href = '@Url.Action("ViewStudents","Home",new { bookId = Model.bookId })'"> View Students</button>
+        </div>
+    </div>
+</div>
+<hr />
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    #
+                </th>
+                <th>
+                    Taken Date
+                </th>
+                <th>
+                    Brought Date
+                </th>
+                <th>
+                    Borrowed By
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var record in Model.borrowedRecords)
+            {
+                <tr>
+                    <td>
+                        @record.borrowId
+                    </td>
+                    <td>
+                        @record.takenDate
+                    </td>
+                    <td>
+                        @if (record.broughtDate != null)
+                        {
+                            <span>@record.broughtDate</span>
+                        }
+                        else
+                        {
+                            <span class="text-danger">Book Out</span>
+                        }
+                    </td>
+                    <td>
+                        @record.studentName
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+

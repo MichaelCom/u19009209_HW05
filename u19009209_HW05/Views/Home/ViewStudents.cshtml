@@ -1,0 +1,96 @@
+﻿@model IEnumerable<u19009209_HW05.Models.Student>
+
+@{
+    ViewBag.Title = "ViewStudents";
+}
+
+
+<hr />
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-4">
+            <input class="form-control" placeholder="Search Student Name" />
+        </div>
+        <div class="col-lg-2">
+            <select class="form-control" placeholder="Select a Class ">
+            </select>
+        </div>
+        <div class="col-lg-2">
+            <button class="btn btn-success btn-lg"> Search </button>
+        </div>
+        <div class="col-lg-2">
+            <button class="btn btn-danger btn-lg"> Clear </button>
+        </div>
+    </div>
+</div>
+<hr />
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                #
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Surname
+            </th>
+            <th>
+                Class
+            </th>
+            <th>
+                Points
+            </th>
+            <th>
+                @if (ViewBag.Status == true)
+                {
+                    <span>Borrow Book</span>
+                }
+                else
+                {
+                    <span>Return Book</span>
+                }
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var student in Model)
+        {
+            <tr>
+                <td>
+                    @student.studentId
+                </td>
+                <td>
+                    @student.name
+                </td>
+                <td>
+                    @student.surname
+                </td>
+                <td>
+                    @student.Class
+                </td>
+                <td>
+                    @student.point
+                </td>
+                <td>
+                    @if (ViewBag.Status == false)
+                    {
+                        if (student.studentId == ViewBag.studentId)
+                        {
+                            <button class="btn btn-primary" onclick="window.location.href = ''"> Return Book</button>
+                        }
+                    }
+                    else
+                    {
+                        <button class="btn btn-primary" onclick="window.location.href = ''"> Borrow Book</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
