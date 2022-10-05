@@ -5,24 +5,36 @@
 }
 
 
+
+@if (ViewBag.MessageStudent != "")
+{
+    <p class="text-info">@ViewBag.MessageStudent</p>
+}
+
 <hr />
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-4">
-            <input class="form-control" placeholder="Search Student Name" />
-        </div>
-        <div class="col-lg-2">
-            <select class="form-control" placeholder="Select a Class ">
-            </select>
-        </div>
-        <div class="col-lg-2">
-            <button class="btn btn-success btn-lg"> Search </button>
-        </div>
-        <div class="col-lg-2">
-            <button class="btn btn-danger btn-lg"> Clear </button>
+@using (Html.BeginForm("SearchStudents", "Home", FormMethod.Post))
+{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-4">
+                <input class="form-control" placeholder="Search Student Name" name="name" />
+            </div>
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <div class="col-md-12 ">
+                        @Html.DropDownList("Class", (IEnumerable<SelectListItem>)ViewBag.Classes, "Select Class", new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <button class="btn btn-success btn-lg" type="submit"> Search </button>
+            </div>
+            <div class="col-lg-2">
+                <button class="btn btn-danger btn-lg" type="button" onclick="window.location.href = '@Url.Action("ClearStudents","Home")'"> Clear </button>
+            </div>
         </div>
     </div>
-</div>
+}
 <hr />
 
 <table class="table table-striped">
@@ -79,18 +91,16 @@
                     {
                         if (student.studentId == ViewBag.studentId)
                         {
-                            <button class="btn btn-primary" onclick="window.location.href = ''"> Return Book</button>
+                            <button class="btn btn-primary" type="button" onclick="window.location.href = '@Url.Action("ReturnBook","Home")'"> Return Book</button>
                         }
                     }
                     else
                     {
-                        <button class="btn btn-primary" onclick="window.location.href = ''"> Borrow Book</button>
+                        <button class="btn btn-primary" onclick="window.location.href = '@Url.Action("BorrowBook","Home", new {  studentId = student.studentId})'"> Borrow Book</button>
                     }
                 </td>
             </tr>
         }
     </tbody>
 </table>
-
-
 

@@ -12,7 +12,6 @@ namespace u19009209_HW05.Models
 {
     public class DataService
     {
-
         private static DataService instance;
         public static DataService GetDataService()
         {
@@ -27,45 +26,14 @@ namespace u19009209_HW05.Models
             SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder();
             sqlConnectionStringBuilder["Data Source"] = "DESKTOP-3ML24ME\\SQLEXPRESS";
             sqlConnectionStringBuilder["Initial Catalog"] = "Library";
-            sqlConnectionStringBuilder["Integrated Security"] = "True";
+            sqlConnectionStringBuilder["Integrated Security"] = "true";
             return new SqlConnection(sqlConnectionStringBuilder.ConnectionString);
-        }
-
-        public bool openConnection()
-        {
-            using (SqlConnection conn = buildConnection())
-            {
-                try
-                {
-                    conn.Open();
-                    return true;
-                }
-                catch
-                {
-                    return false;
-                }
-            }
-        }
-        public bool closeConnection()
-        {
-            using (SqlConnection conn = buildConnection())
-            {
-                try
-                {
-                    conn.Close();
-                    return true;
-                }
-                catch
-                {
-                    return false;
-                }
-            }
         }
 
         public List<BookHybrid> getAllBooks()
         {
             List<BookHybrid> bookList = new List<BookHybrid>();
-            String command ="SELECT book.[bookId] as bookId ,book.[name] as name ,book.[pagecount] as pagecount ,book.[point] as point, auth.[surname] as authorSurname ,type.[name] typeName,  book.[authorId],book.[typeId] " +
+            String command = "SELECT book.[bookId] as bookId ,book.[name] as name ,book.[pagecount] as pagecount ,book.[point] as point,auth.[name] as authorName,auth.[surname] as authorSurname ,type.[name] typeName,  book.[authorId],book.[typeId] " +
                             "FROM [Library].[dbo].[books] book " +
                             "JOIN [Library].[dbo].[authors] auth on book.authorId = auth.authorId " +
                             "JOIN [Library].[dbo].[types] type on book.typeId = type.typeId";
@@ -73,7 +41,7 @@ namespace u19009209_HW05.Models
             {
                 try
                 {
-                    openConnection();
+                    conn.Open();
                     using (SqlCommand cmd = new SqlCommand(command, conn))
                     {
                         SqlDataReader readBooks = cmd.ExecuteReader();
@@ -86,13 +54,14 @@ namespace u19009209_HW05.Models
                             book.point = (int)readBooks["point"];
                             book.authorId = (int)readBooks["authorId"];
                             book.typeId = (int)readBooks["typeId"];
+                            book.authorName = (string)readBooks["authorName"];
                             book.authorSurname = (string)readBooks["authorSurname"];
                             book.typeName = (string)readBooks["typeName"];
                             book.status = true;
                             bookList.Add(book);
                         }
                     }
-                    closeConnection();
+                    conn.Close();
                 }
                 catch
                 {
@@ -105,26 +74,34 @@ namespace u19009209_HW05.Models
         public List<Student> getAllStudents()
         {
             List<Student> studentList = new List<Student>();
-            String command = "SELECT * FROM [Library].[dbo].[students]";
-            using (SqlConnection conn = buildConnection())
+            try
             {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand(command, conn))
+                String command = "SELECT * FROM [Library].[dbo].[students]";
+                using (SqlConnection conn = buildConnection())
                 {
-                    SqlDataReader readStudents = cmd.ExecuteReader();
-                    while (readStudents.Read())
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(command, conn))
                     {
-                        Student student = new Student();
-                        student.studentId = (int)readStudents["studentId"];
-                        student.name = (string)readStudents["name"];
-                        student.surname = (string)readStudents["surname"];
-                        student.birthdate = (DateTime)readStudents["birthdate"];
-                        student.gender = (string)readStudents["gender"];
-                        student.Class = (string)readStudents["class"];
-                        student.point = (int)readStudents["point"];
-                        studentList.Add(student);
+                        SqlDataReader readStudents = cmd.ExecuteReader();
+                        while (readStudents.Read())
+                        {
+                            Student student = new Student();
+                            student.studentId = (int)readStudents["studentId"];
+                            student.name = (string)readStudents["name"];
+                            student.surname = (string)readStudents["surname"];
+                            student.birthdate = (DateTime)readStudents["birthdate"];
+                            student.gender = (string)readStudents["gender"];
+                            student.Class = (string)readStudents["class"];
+                            student.point = (int)readStudents["point"];
+                            studentList.Add(student);
+                        }
                     }
+                    conn.Close();
                 }
+            }
+            catch
+            {
+
             }
             return studentList;
         }
@@ -132,33 +109,41 @@ namespace u19009209_HW05.Models
         public List<Borrow> getAllBorrows()
         {
             List<Borrow> borrowList = new List<Borrow>();
-            String command = "SELECT * FROM [Library].[dbo].[borrows]";
-            using (SqlConnection conn = buildConnection())
+            try
             {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand(command, conn))
+                String command = "SELECT * FROM [Library].[dbo].[borrows]";
+                using (SqlConnection conn = buildConnection())
                 {
-                    SqlDataReader readBorrows = cmd.ExecuteReader();
-                    while (readBorrows.Read())
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(command, conn))
                     {
-                        Borrow borrow = new Borrow();
-                        borrow.borrowId = (int)readBorrows["borrowId"];
-                        borrow.studentId = (int)readBorrows["studentId"];
-                        borrow.bookId = (int)readBorrows["bookId"];
-                        borrow.takenDate = Convert.ToDateTime(readBorrows["takenDate"]);
-                        var broughtDate = readBorrows["broughtDate"].ToString();
-                        if (broughtDate != "")
+                        SqlDataReader readBorrows = cmd.ExecuteReader();
+                        while (readBorrows.Read())
                         {
-                            borrow.broughtDate = Convert.ToDateTime(readBorrows["broughtDate"]);
-                        }
-                        else
-                        {
-                            borrow.broughtDate = null;
-                        }
+                            Borrow borrow = new Borrow();
+                            borrow.borrowId = (int)readBorrows["borrowId"];
+                            borrow.studentId = (int)readBorrows["studentId"];
+                            borrow.bookId = (int)readBorrows["bookId"];
+                            borrow.takenDate = Convert.ToDateTime(readBorrows["takenDate"]);
+                            var broughtDate = readBorrows["broughtDate"].ToString();
+                            if (broughtDate != "")
+                            {
+                                borrow.broughtDate = Convert.ToDateTime(readBorrows["broughtDate"]);
+                            }
+                            else
+                            {
+                                borrow.broughtDate = null;
+                            }
 
-                        borrowList.Add(borrow);
+                            borrowList.Add(borrow);
+                        }
                     }
+                    conn.Close();
                 }
+            }
+            catch
+            {
+
             }
             return borrowList;
         }
@@ -166,21 +151,29 @@ namespace u19009209_HW05.Models
         public SelectList GetTypes()
         {
             List<type> typesList = new List<type>();
-            String command = "SELECT * FROM [Library].[dbo].[types]";
-            using (SqlConnection conn = buildConnection())
+            try
             {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand(command, conn))
+                String command = "SELECT * FROM [Library].[dbo].[types]";
+                using (SqlConnection conn = buildConnection())
                 {
-                    SqlDataReader readTypes = cmd.ExecuteReader();
-                    while (readTypes.Read())
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(command, conn))
                     {
-                        type type = new type();
-                        type.typeId = (int)readTypes["typeId"];
-                        type.name = (string)readTypes["name"];
-                        typesList.Add(type);
+                        SqlDataReader readTypes = cmd.ExecuteReader();
+                        while (readTypes.Read())
+                        {
+                            type type = new type();
+                            type.typeId = (int)readTypes["typeId"];
+                            type.name = (string)readTypes["name"];
+                            typesList.Add(type);
+                        }
                     }
+                    conn.Close();
                 }
+            }
+            catch
+            {
+
             }
             return new SelectList(typesList, "typeId", "name");
         }
@@ -188,23 +181,82 @@ namespace u19009209_HW05.Models
         public SelectList GetAuthors()
         {
             List<Author> authorsList = new List<Author>();
-            String command = "SELECT * FROM [Library].[dbo].[authors]";
-            using (SqlConnection conn = buildConnection())
+            try
             {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand(command, conn))
+                String command = "SELECT * FROM [Library].[dbo].[authors]";
+                using (SqlConnection conn = buildConnection())
                 {
-                    SqlDataReader readAuthors = cmd.ExecuteReader();
-                    while (readAuthors.Read())
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(command, conn))
                     {
-                        Author author = new Author();
-                        author.authorId = (int)readAuthors["authorId"];
-                        author.name = (string)readAuthors["name"];
-                        authorsList.Add(author);
+                        SqlDataReader readAuthors = cmd.ExecuteReader();
+                        while (readAuthors.Read())
+                        {
+                            Author author = new Author();
+                            author.authorId = (int)readAuthors["authorId"];
+                            author.name = (string)readAuthors["name"] + " " + (string)readAuthors["surname"];
+                            authorsList.Add(author);
+                        }
                     }
+                    conn.Close();
                 }
+            }
+            catch
+            {
+
             }
             return new SelectList(authorsList, "authorId", "name");
         }
+
+        public string BorrowBook(int studentId, int bookId)
+        {
+            string res = "";
+            try
+            {
+                String command = "Insert Into [Library].[dbo].[borrows] (studentId,bookId,takenDate) values ('" + studentId + "','" + bookId + "',GETDATE())";
+                using (SqlConnection conn = buildConnection())
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(command, conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                        res = "Successfully Borrowed Book";
+                    }
+                    conn.Close();
+                }
+
+            }
+            catch
+            {
+
+            }
+            return res;
+        }
+
+        public string ReturnBook(int borrowId)
+        {
+            string res = "";
+            try
+            {
+                String command = "Update [Library].[dbo].[borrows] set broughtDate = GETDATE() where borrowId =" + borrowId;
+                using (SqlConnection conn = buildConnection())
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(command, conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                        res = "Successfully Returned Book";
+                    }
+                    conn.Close();
+                }
+            }
+            catch
+            {
+
+            }
+            return res;
+        }
+
+
     }
 }

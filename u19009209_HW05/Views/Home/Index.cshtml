@@ -7,13 +7,12 @@
 <h2>Books</h2>
 @if (ViewBag.Message != "")
 {
-    <p class="text-danger">@ViewBag.Message</p>
-
+    <p class="text-info">@ViewBag.Message</p>
 }
 
 <hr />
 <div class="container-fluid">
-    @using (Html.BeginForm("Search", "Home", FormMethod.Post))
+    @using (Html.BeginForm("SearchBooks", "Home", FormMethod.Post))
     {
         <div class="row">
             <div class="col-lg-4">
@@ -29,7 +28,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <div class="col-md-12 ">
-                        @Html.DropDownList("authorId", (IEnumerable<SelectListItem>)ViewBag.Types, "Select Author", new { @class = "form-control" })
+                        @Html.DropDownList("authorId", (IEnumerable<SelectListItem>)ViewBag.Authors, "Select Author", new { @class = "form-control" })
                     </div>
                 </div>
             </div>
@@ -37,7 +36,7 @@
                 <button class="btn btn-success btn-lg" type="submit"> Search </button>
             </div>
             <div class="col-lg-2">
-                <button class="btn btn-danger btn-lg"> Clear </button>
+                <button class="btn btn-danger btn-lg" type="button" onclick="window.location.href = '@Url.Action("ClearBooks","Home")'"> Clear </button>
             </div>
         </div>
     }
@@ -82,7 +81,7 @@
                     @item.name
                 </td>
                 <td>
-                    @item.authorSurname
+                    @item.authorName @item.authorSurname
                 </td>
                 <td>
                     @item.typeName

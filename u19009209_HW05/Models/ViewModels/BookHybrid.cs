@@ -11,6 +11,7 @@ namespace u19009209_HW05.Models.ViewModels
         public string name { get; set; }
         public int pagecount { get; set; }
         public int point { get; set; }
+        public string authorName { get; set; }
         public string authorSurname { get; set; }
         public int authorId { get; set; }
         public int typeId { get; set; }
@@ -19,5 +20,6 @@ namespace u19009209_HW05.Models.ViewModels
         public int totalBorrows { get; set; }
         public List<BorrowsHybrid> borrowedRecords { get; set; }
         public int studentId { get; set; }
+        public int borrowId { get; set; }
     }
 }
