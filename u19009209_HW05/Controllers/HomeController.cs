@@ -63,7 +63,7 @@ namespace u19009209_HW05.Controllers
             {
                 if (SearchedBooks.Count > 0 && name == "" && typeId == null && authorId == null)
                 {
-                    TempData["Message"] = "You Didnt Search For Anything Stop Wasting my Time !!!";
+                    TempData["Message"] = "Search fields empty";
                 }
                 else
                 {
