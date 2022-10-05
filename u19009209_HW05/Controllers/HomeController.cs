@@ -57,7 +57,6 @@ namespace u19009209_HW05.Controllers
                 ViewBag.Types = db.GetTypes();
 
                 ViewBag.Authors = db.GetAuthors();
-
             }
             catch (Exception message)
             {
